@@ -1,5 +1,6 @@
 #include <iostream>
 #include<algorithm>
+#include<cstring>
 using namespace std;
 
 int input, input2, N, Q, result;
