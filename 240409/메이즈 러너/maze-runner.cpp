@@ -8,10 +8,7 @@ int N, M, K;
 struct Player {
 	bool isExit = false;
 	int x = 0, y = 0;
-};
-struct Info {
-	int dist;
-	int num;
+	int num = 1;
 };
 int exitX, exitY;
 Player player[11];
@@ -35,7 +32,13 @@ int main() {
 	}
 	for (int i = 1; i <= M; ++i) {
 		cin >> player[i].x >> player[i].y;
-		map[player[i].x][player[i].y] = 100 + i;
+		if (map[player[i].x][player[i].y] > 100) {
+			player[map[player[i].x][player[i].y] - 100].num += player[i].num;
+			player[i].isExit = true;
+		}
+		else {
+			map[player[i].x][player[i].y] = 100 + i;
+		}
 	}
 	cin >> exitX >> exitY;
 	map[exitX][exitY] = 100;
@@ -50,7 +53,7 @@ int main() {
 			for (int j = 0; j < 4; ++j) {
 				int nx = player[i].x + dx[j];
 				int ny = player[i].y + dy[j];
-				if (nx <= 0 || ny <= 0 || nx > N || ny > N || (map[nx][ny] > 0 && map[nx][ny]< 100)) {
+				if (nx <= 0 || ny <= 0 || nx > N || ny > N || (map[nx][ny] > 0 && map[nx][ny] < 100)) {
 					continue;
 				}
 				int temp = abs(exitX - nx) + abs(exitY - ny);
@@ -63,10 +66,14 @@ int main() {
 				map[player[i].x][player[i].y] = 0;
 				player[i].x += dx[dir];
 				player[i].y += dy[dir];
-				++result;
+				result += player[i].num;
 				if (player[i].x == exitX && player[i].y == exitY) {
 					player[i].isExit = true;
-					--cnt;
+					cnt -= player[i].num;
+				}
+				else if (map[player[i].x][player[i].y] > 100) {
+					player[map[player[i].x][player[i].y] - 100].num += player[i].num;
+					player[i].isExit = true;
 				}
 				else {
 					map[player[i].x][player[i].y] = 100 + i;
@@ -82,8 +89,8 @@ int main() {
 		bool findExit = false;
 		bool findPlayer = false;
 		for (int len = 2; len <= N; ++len) {
-			for (int i = 1; i + len <= N; ++i) {
-				for (int j = 1; j + len <= N; ++j) {
+			for (int i = 1; i <= N; ++i) {
+				for (int j = 1; j <= N; ++j) {
 					findExit = false;
 					findPlayer = false;
 					for (int k = 0; k < len; ++k) {
@@ -116,7 +123,7 @@ int main() {
 				break;
 			}
 		}
-		// 회전
+		// 회전(일반 Map)
 		int tempMap[11][11];
 		memset(tempMap, 0, sizeof(tempMap));
 		for (int i = 0; i < size; ++i) {
