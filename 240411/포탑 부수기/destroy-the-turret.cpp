@@ -112,14 +112,14 @@ int main() {
 				if (nx == N) {
 					nx = 0;
 				}
-				if (ny == N) {
+				if (ny == M) {
 					ny = 0;
 				}
 				if (nx == -1) {
 					nx = N - 1;
 				}
 				if (ny == -1) {
-					ny = N - 1;
+					ny = M - 1;
 				}
 				if (isVisit[nx][ny] || (map[nx][ny].power == 0)) {
 					continue;
@@ -171,14 +171,14 @@ int main() {
 				if (nx == N) {
 					nx = 0;
 				}
-				if (ny == N) {
+				if (ny == M) {
 					ny = 0;
 				}
 				if (nx == -1) {
 					nx = N - 1;
 				}
 				if (ny == -1) {
-					ny = N - 1;
+					ny = M - 1;
 				}
 				if (isVisit[nx][ny] || (map[nx][ny].power == 0)) {
 					continue;
