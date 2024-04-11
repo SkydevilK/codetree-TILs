@@ -141,6 +141,7 @@ int main() {
 			}
 		}
 		memset(isVisit, 0, sizeof(isVisit));
+		isVisit[v1[0].x][v1[0].y] = true;
 		if (isRazer) {
 			for (int i = 0; i < findPath.size() - 1; ++i) {
 				isVisit[findPath[i].first][findPath[i].second] = true;
@@ -189,9 +190,6 @@ int main() {
 				isVisit[nx][ny] = true;
 			}
 		}
-		isVisit[v1[0].x][v1[0].y] = true;
-
-		// 정비
 		for (int i = 0; i < N; ++i) {
 			for (int j = 0; j < M; ++j) {
 				if (map[i][j].power > 0 && !isVisit[i][j]) {
