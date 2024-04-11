@@ -140,23 +140,27 @@ int main() {
 				q.push(next);
 			}
 		}
+		memset(isVisit, 0, sizeof(isVisit));
 		if (isRazer) {
 			for (int i = 0; i < findPath.size() - 1; ++i) {
+				isVisit[findPath[i].first][findPath[i].second] = true;
 				map[findPath[i].first][findPath[i].second].power -= (map[v1[0].x][v1[0].y].power / 2);
 				if (map[findPath[i].first][findPath[i].second].power < 0) {
 					map[findPath[i].first][findPath[i].second].power = 0;
 				}
 			}
-			map[findPath[findPath.size() - 1].first][findPath.size() - 1].power -= (map[v1[0].x][v1[0].y].power);
-			if (map[findPath[findPath.size() - 1].first][findPath.size() - 1].power < 0) {
-				map[findPath[findPath.size() - 1].first][findPath.size() - 1].power = 0;
+			map[findPath[findPath.size() - 1].first][findPath[findPath.size() - 1].second].power -= (map[v1[0].x][v1[0].y].power);
+			isVisit[findPath[findPath.size() - 1].first][findPath[findPath.size() - 1].second] = true;
+			if (map[findPath[findPath.size() - 1].first][findPath[findPath.size() - 1].second].power < 0) {
+				map[findPath[findPath.size() - 1].first][findPath[findPath.size() - 1].second].power = 0;
 			}
 		}
 		// 포탄 공격
 		if (!isRazer) {
 			int cx = v2[0].x;
 			int cy = v2[0].y;
-			map[cx][cy].power -= v1[0].power;
+			map[cx][cy].power -= map[v1[0].x][v1[0].y].power;
+			isVisit[cx][cy] = true;
 			if (map[cx][cy].power < 0) {
 				map[cx][cy].power = 0;
 			}
@@ -178,9 +182,20 @@ int main() {
 				if (isVisit[nx][ny] || (map[nx][ny].power == 0)) {
 					continue;
 				}
-				map[nx][ny].power -= v1[0].power;
+				map[nx][ny].power -= (map[v1[0].x][v1[0].y].power / 2);
 				if (map[nx][ny].power < 0) {
 					map[nx][ny].power = 0;
+				}
+				isVisit[nx][ny] = true;
+			}
+		}
+		isVisit[v1[0].x][v1[0].y] = true;
+
+		// 정비
+		for (int i = 0; i < N; ++i) {
+			for (int j = 0; j < M; ++j) {
+				if (map[i][j].power > 0 && !isVisit[i][j]) {
+					++map[i][j].power;
 				}
 			}
 		}
