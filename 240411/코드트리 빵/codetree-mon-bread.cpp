@@ -152,10 +152,10 @@ int main() {
 					q.push(next);
 				}
 			}
-			eraseMap.push_back({ customer[turn].x, customer[turn].y});
+			eraseMap.push_back({ customer[turn].x, customer[turn].y });
 			map[customer[turn].x][customer[turn].y] = 3;
 		}
-		vector<pair<int, int>>::iterator iter = eraseMap.begin();
+		iter = eraseMap.begin();
 		while (iter != eraseMap.end()) {
 			bool isCheck = false;
 			for (int i = 1; i <= M; ++i) {
