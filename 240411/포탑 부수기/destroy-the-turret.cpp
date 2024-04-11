@@ -58,7 +58,6 @@ bool compareStrong(Tower& t1, Tower& t2) {
 	}
 }
 vector<Tower> v1;
-vector<Tower> v2;
 bool isVisit[10][10];
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -77,24 +76,18 @@ int main() {
 
 	for (int turn = 1; turn <= K; ++turn) {
 		v1 = {};
-		v2 = {};
 		for (int i = 0; i < N; ++i) {
 			for (int j = 0; j < M; ++j) {
 				if (map[i][j].power > 0) {
 					v1.push_back(map[i][j]);
-					v2.push_back(map[i][j]);
 				}
 			}
 		}
 		if (v1.size() <= 1) {
 			break;
 		}
-		// 공격자 선정
-		// 공격자의 공격
+		
 		sort(v1.begin(), v1.end(), compareWeak);
-
-		// 방어자 선정
-		sort(v2.begin(), v2.end(), compareStrong);
 		map[v1[0].x][v1[0].y].power += (N + M);
 		map[v1[0].x][v1[0].y].attackTurn = turn;
 		bool isRazer = false;
@@ -124,7 +117,7 @@ int main() {
 				if (isVisit[nx][ny] || (map[nx][ny].power == 0)) {
 					continue;
 				}
-				if (nx == v2[0].x && ny == v2[0].y) {
+				if (nx == v1[v1.size() - 1].x && ny == v1[v1.size() - 1].y) {
 					isRazer = true;
 					findPath = cur.path;
 					findPath.push_back({ nx, ny });
@@ -158,8 +151,8 @@ int main() {
 		}
 		// 포탄 공격
 		if (!isRazer) {
-			int cx = v2[0].x;
-			int cy = v2[0].y;
+			int cx = v1[v1.size() - 1].x;
+			int cy = v1[v1.size() - 1].y;
 			map[cx][cy].power -= map[v1[0].x][v1[0].y].power;
 			isVisit[cx][cy] = true;
 			if (map[cx][cy].power < 0) {
