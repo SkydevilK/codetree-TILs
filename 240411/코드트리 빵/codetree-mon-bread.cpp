@@ -89,6 +89,26 @@ int main() {
 			cout << turn << "\n";
 			break;
 		}
+		vector<pair<int, int>>::iterator iter = eraseMap.begin();
+		while (iter != eraseMap.end()) {
+			bool isCheck = false;
+			for (int i = 1; i <= M; ++i) {
+				if (!customer[i].isMove) {
+					continue;
+				}
+				if (customer[i].x == (*iter).first && customer[i].y == (*iter).second) {
+					isCheck = true;
+					break;
+				}
+			}
+			if (!isCheck) {
+				map[(*iter).first][(*iter).second] = 2;
+				iter = eraseMap.erase(iter);
+			}
+			else {
+				++iter;
+			}
+		}
 		// 베이스 캠프 지정
 		if (turn <= M) {
 			queue<Path> q;
