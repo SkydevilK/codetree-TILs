@@ -7,7 +7,7 @@ using namespace std;
 
 int N, M;
 
-// 0 빈칸 1 베이스캠프 2 이동 불가
+// 0 빈칸 1 베이스캠프 2 이동 불가 3 선점 베이스캠프
 int map[16][16];
 
 int dx[] = { -1,0,0,1 };
@@ -24,8 +24,8 @@ struct Path {
 };
 vector<pair<int, int>> stores(31);
 
-// 방문한 편의점 (이동 턴 종료 후 정보 변경)
-vector<pair<int, int>> visitStores;
+vector<pair<int, int>> eraseMap;
+
 vector<Customer> customer(31);
 int x, y;
 int main() {
@@ -63,9 +63,9 @@ int main() {
 					}
 					if (nx == stores[i].first && ny == stores[i].second) {
 						if (cur.path.size() == 0) {
-							visitStores.push_back({ nx, ny });
+							--count;
+							eraseMap.push_back({ nx, ny });
 							customer[i].isMove = false;
-							map[nx][ny] = 2;
 						}
 						else {
 							customer[i].x = cur.path[0].first;
@@ -85,11 +85,6 @@ int main() {
 			}
 		}
 		// 도착
-		for (int i = 0; i < visitStores.size(); ++i) {
-			--count;
-			map[visitStores[i].first][visitStores[i].second] = 2;
-		}
-		visitStores = {};
 		if (count == 0) {
 			cout << turn << "\n";
 			break;
@@ -106,7 +101,7 @@ int main() {
 				for (int dir = 0; dir < 4; ++dir) {
 					int nx = cur.x + dx[dir];
 					int ny = cur.y + dy[dir];
-					if (nx <= 0 || ny <= 0 || nx > N || ny > N || map[nx][ny] == 2 || isVisit[nx][ny]) {
+					if (nx <= 0 || ny <= 0 || nx > N || ny > N || map[nx][ny] >= 2 || isVisit[nx][ny]) {
 						continue;
 					}
 					if (map[nx][ny] == 1) {
@@ -137,7 +132,28 @@ int main() {
 					q.push(next);
 				}
 			}
-			map[customer[turn].x][customer[turn].y] = 2;
+			eraseMap.push_back({ customer[turn].x, customer[turn].y});
+			map[customer[turn].x][customer[turn].y] = 3;
+		}
+		vector<pair<int, int>>::iterator iter = eraseMap.begin();
+		while (iter != eraseMap.end()) {
+			bool isCheck = false;
+			for (int i = 1; i <= M; ++i) {
+				if (!customer[i].isMove) {
+					continue;
+				}
+				if (customer[i].x == (*iter).first && customer[i].y == (*iter).second) {
+					isCheck = true;
+					break;
+				}
+			}
+			if (!isCheck) {
+				map[(*iter).first][(*iter).second] = 2;
+				iter = eraseMap.erase(iter);
+			}
+			else {
+				++iter;
+			}
 		}
 	}
 }
