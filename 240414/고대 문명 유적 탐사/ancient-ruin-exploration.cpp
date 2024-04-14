@@ -84,11 +84,11 @@ int main() {
         for (int a = 1; a <= 3; ++a) {
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 3; ++j) {
-                    int temp = rotate(i, j, a);
+                    int temp = rotate(j, i, a);
                     if (maxResult < temp) {
                         maxResult = temp;
-                        x = i;
-                        y = j;
+                        x = j;
+                        y = i;
                         rotateNum = a;
                     }
                 }
